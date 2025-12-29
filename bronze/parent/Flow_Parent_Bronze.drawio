@@ -1,0 +1,281 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.9">
+  <diagram name="Page-1" id="uQfAu6S5Ah9lhE5gjaIf">
+    <mxGraphModel dx="1025" dy="451" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-3" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-2" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=50;" value="Pipeline trigger" vertex="1">
+          <mxGeometry height="60" width="120" x="20" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-6" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-5" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-2" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="Initialize pipeline run &amp;amp; execution tracking (script)" vertex="1">
+          <mxGeometry height="60" width="120" x="220" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on success" vertex="1">
+          <mxGeometry height="30" width="60" x="140" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-15" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-14" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-5" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="fetch context id from name(script/lookup)" vertex="1">
+          <mxGeometry height="60" width="120" x="420" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-9" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on success" vertex="1">
+          <mxGeometry height="30" width="60" x="340" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-12" parent="1" style="text;whiteSpace=wrap;html=1;" value="&lt;div style=&quot;forced-color-adjust: none; box-shadow: none !important;&quot;&gt;Initialize execution tracking → verify whether a run context already exists → create it only if missing → always record the current execution attempt → proceed with pipeline processing&lt;/div&gt;&lt;div style=&quot;forced-color-adjust: none; box-shadow: none !important;&quot;&gt;&lt;br style=&quot;forced-color-adjust: none; box-shadow: none !important; color: rgb(255, 255, 255); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(27, 29, 30); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;&#xa;&#xa;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="140" width="130" x="20" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-13" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Initialize pipeline run &amp;amp; execution tracking (script)" vertex="1">
+          <mxGeometry height="60" width="90" x="20" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-33" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-32" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-34" connectable="0" parent="R3lQoK9WY0r4hFYFM2Ct-33" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="on success" vertex="1">
+          <mxGeometry relative="1" x="-0.0472" y="8" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-14" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="geting execution order for a single module id/name (script/lookup)" vertex="1">
+          <mxGeometry height="60" width="120" x="620" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-16" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on success" vertex="1">
+          <mxGeometry height="30" width="60" x="540" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-38" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-37" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-59" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-32" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-58" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-32" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="for each loop basis on execution order (foreach loop)" vertex="1">
+          <mxGeometry height="70" width="140" x="840" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-41" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-40" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1240" y="130" />
+              <mxPoint x="1240" y="130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-43" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-37" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" target="R3lQoK9WY0r4hFYFM2Ct-40">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-37" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="End pipeline run &amp;amp; execution tracking (script)" vertex="1">
+          <mxGeometry height="70" width="140" x="1060" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-39" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on success" vertex="1">
+          <mxGeometry height="30" width="60" x="980" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-50" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-40" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-49" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-40" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="set error msg in variable (set variable)" vertex="1">
+          <mxGeometry height="70" width="140" x="1280" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-42" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on fail" vertex="1">
+          <mxGeometry height="30" width="60" x="1210" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-45" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on skip" vertex="1">
+          <mxGeometry height="30" width="60" x="1210" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-46" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="if start log fail&amp;nbsp;&lt;span style=&quot;text-align: left;&quot;&gt;→&amp;nbsp;set error msg&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;if module context name/id fail&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;→&lt;/span&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; set error msg&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;if execution order fail&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;→&lt;/span&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp; set error msg&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;and so on ....&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="100" width="165" x="15" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-48" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="set error msg in variable (set variable)" vertex="1">
+          <mxGeometry height="30" width="170" x="10" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-53" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-52" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-49" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="insert error logs in a separate error log table (script)" vertex="1">
+          <mxGeometry height="70" width="140" x="1500" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-51" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on completion" vertex="1">
+          <mxGeometry height="30" width="60" x="1420" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-56" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-55" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-57" connectable="0" parent="R3lQoK9WY0r4hFYFM2Ct-56" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="on completion" vertex="1">
+          <mxGeometry relative="1" x="0.0639" y="9" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-52" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="parent log update status as fail and throw error code (script)" vertex="1">
+          <mxGeometry height="70" width="140" x="1720" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-54" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on completion" vertex="1">
+          <mxGeometry height="30" width="60" x="1640" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-55" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="fail pipeline error code give as output (fail activity)" vertex="1">
+          <mxGeometry height="70" width="140" x="1940" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-84" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-58" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-83" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-58" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="" vertex="1">
+          <mxGeometry height="175" width="580" x="650" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-60" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="inside for each" vertex="1">
+          <mxGeometry height="30" width="60" x="940" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-63" edge="1" parent="1" style="shape=link;html=1;rounded=0;" target="R3lQoK9WY0r4hFYFM2Ct-58" value="">
+          <mxGeometry relative="1" width="100" as="geometry">
+            <Array as="points">
+              <mxPoint x="1030" y="342" />
+            </Array>
+            <mxPoint x="650" y="341.94" as="sourcePoint" />
+            <mxPoint x="750" y="341.94" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-67" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#000000,#CC0000);" target="R3lQoK9WY0r4hFYFM2Ct-66" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-65" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="call child pipeline (invoke)" vertex="1">
+          <mxGeometry height="60" width="80" x="670" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-70" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-66" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#000000,#007FFF);" target="R3lQoK9WY0r4hFYFM2Ct-69" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-66" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="set skip failure for fail pipeline" vertex="1">
+          <mxGeometry height="60" width="80" x="780" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-73" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-69" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#000000,#007FFF);" target="R3lQoK9WY0r4hFYFM2Ct-72" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-69" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="set variable fail for pipeline" vertex="1">
+          <mxGeometry height="60" width="80" x="890" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-75" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#000000,#007FFF);" target="R3lQoK9WY0r4hFYFM2Ct-74" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-72" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="insert into error log if error msg there (script)" vertex="1">
+          <mxGeometry height="60" width="80" x="1000" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-74" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="fail pipeline error code (fail)" vertex="1">
+          <mxGeometry height="60" width="80" x="1110" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-78" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-76" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#000000,#007FFF);" target="R3lQoK9WY0r4hFYFM2Ct-77" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-76" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="set variable fail for pipeline" vertex="1">
+          <mxGeometry height="60" width="80" x="670" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-80" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-77" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=light-dark(#000000,#007FFF);" target="R3lQoK9WY0r4hFYFM2Ct-79" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-77" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="set variable fail for pipeline" vertex="1">
+          <mxGeometry height="60" width="80" x="830" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-79" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="fail pipeline error code (fail)" vertex="1">
+          <mxGeometry height="60" width="80" x="990" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-81" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="On True" vertex="1">
+          <mxGeometry height="30" width="60" x="670" y="225" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-82" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="On False" vertex="1">
+          <mxGeometry height="30" width="60" x="670" y="440" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-86" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-83" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-85" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-88" connectable="0" parent="R3lQoK9WY0r4hFYFM2Ct-86" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="on continue" vertex="1">
+          <mxGeometry relative="1" x="-0.1" y="9" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-83" parent="1" style="whiteSpace=wrap;html=1;rounded=1;" value="set variable fail for pipeline for for each" vertex="1">
+          <mxGeometry height="60" width="120" x="1320" y="312.5" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-90" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-85" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="R3lQoK9WY0r4hFYFM2Ct-89" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-85" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="insert into error log if error msg there (script)" vertex="1">
+          <mxGeometry height="60" width="80" x="1520" y="312.5" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-87" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="on fail" vertex="1">
+          <mxGeometry height="30" width="60" x="1250" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-89" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="fail pipeline error code for for each (fail)" vertex="1">
+          <mxGeometry height="60" width="80" x="1680" y="312.5" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-91" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="set skip failure for fail pipeline" vertex="1">
+          <mxGeometry height="30" width="175" x="15" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-92" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="if skipfailure is equal to 1 and pipeline failed then set it it to 0 else set it to 1" vertex="1">
+          <mxGeometry height="80" width="175" x="15" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-93" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="if invoke pipeline status is fail&amp;nbsp;&lt;span style=&quot;text-align: left;&quot;&gt;→ error msg&lt;/span&gt;&lt;div&gt;else&amp;nbsp;&lt;span style=&quot;text-align: left; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;→ no failure as error msg&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="175" x="15" y="770" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-94" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="set variable for invoke fail" vertex="1">
+          <mxGeometry height="30" width="170" x="12.5" y="750" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-95" parent="1" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;direction=west;" value="" vertex="1">
+          <mxGeometry height="710" width="50" x="270" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="R3lQoK9WY0r4hFYFM2Ct-96" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="IMP activity description/logic (more coming soon .... )" vertex="1">
+          <mxGeometry height="80" width="110" x="330" y="515" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-4" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Context id&amp;nbsp;&lt;span style=&quot;text-align: left;&quot;&gt;→&amp;nbsp;&lt;/span&gt;&amp;nbsp;can mean ingest source id/name which is&amp;nbsp; required for in gestion" vertex="1">
+          <mxGeometry height="20" width="170" x="20" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-5" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="&lt;pre&gt;Example: ORDERS_PARENT pipeline for 10-Jan-2025.&lt;br/&gt;A run record is created once and reused on retries.&lt;br/&gt;Each retry creates a new execution attempt.&lt;br/&gt;This prevents duplicate processing and enables auditability.&lt;br/&gt;&lt;/pre&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="80" width="420" x="330" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-6" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Initialize pipeline run &amp;amp; execution tracking (script)" vertex="1">
+          <mxGeometry height="20" width="260" x="400" y="870" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-9" edge="1" parent="1" source="R3lQoK9WY0r4hFYFM2Ct-95" style="curved=1;endArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="850" />
+              <mxPoint x="510" y="670" />
+              <mxPoint x="350" y="800" />
+            </Array>
+            <mxPoint x="350" y="850" as="sourcePoint" />
+            <mxPoint x="500" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-10" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" value="Examples for easy understand" vertex="1">
+          <mxGeometry height="30" width="60" x="460" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-11" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#FF3333);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="220" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-13" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=light-dark(transparent,#007FFF);resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#00FFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="240" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-14" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=none;resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#FF3333);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="1070" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-15" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=light-dark(transparent,#007FFF);resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#00FFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="1100" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-16" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=light-dark(transparent,#007FFF);resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#FFFF00);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="1510" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-17" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=light-dark(transparent,#007FFF);resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#00FFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="1730" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-18" parent="1" style="whiteSpace=wrap;html=1;aspect=fixed;" value="&lt;b&gt;&lt;u&gt;LEGEND&amp;nbsp;&lt;/u&gt;&lt;span style=&quot;text-align: left;&quot;&gt;→&lt;/span&gt;&lt;/b&gt;&lt;div&gt;&lt;b&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&amp;nbsp; the colour above the activities denote whether the same tables are updated/insert or diff set of tables inserted or updated.&amp;nbsp;&lt;/span&gt;&lt;/b&gt;&lt;div&gt;&lt;span style=&quot;text-align: left;&quot;&gt;&lt;b&gt;If the colour is same then same tables . Each colour denotes separate tables&lt;/b&gt;&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="167.5" width="167.5" x="1926.25" y="312.5" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-19" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=light-dark(transparent,#007FFF);resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#FFFF00);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="1520" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="0mB480qlEIt4V_9RKnfu-20" parent="1" style="shape=waypoint;sketch=0;size=6;pointerEvents=1;points=[];fillColor=light-dark(transparent,#007FFF);resizable=0;rotatable=0;perimeter=centerPerimeter;snapToPoint=1;strokeColor=light-dark(#000000,#FFFF00);" value="" vertex="1">
+          <mxGeometry height="20" width="20" x="1000" y="250" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
