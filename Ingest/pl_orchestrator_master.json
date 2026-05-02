@@ -1,0 +1,560 @@
+{
+    "name": "pl_orchestrator_master",
+    "properties": {
+        "activities": [
+            {
+                "name": "ORC start log",
+                "type": "Script",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 2,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "linkedServiceName": {
+                    "referenceName": "ecomwarehouse",
+                    "type": "LinkedServiceReference"
+                },
+                "typeProperties": {
+                    "scripts": [
+                        {
+                            "type": "NonQuery",
+                            "text": "DECLARE @domain_id INT;\n\nSELECT DISTINCT @domain_id = domain_id\nFROM retailflow.pipeline_domain AS d\nWHERE d.is_active = 1\n  AND d.domain_name = @domain_name;\n\n-- Insert into BatchLog only if a record with the same batch_id and domain_name doesn't exist\nIF NOT EXISTS (\n    SELECT 1\n    FROM [audit].[orc_batch_log]\n    WHERE batch_id = @entity_batch_id\n      AND domain_name = @domain_name\n)\nBEGIN\n    INSERT INTO [audit].[orc_batch_log] (\n        [batch_id],\n        [domain_name],\n        [status],\n        [start_date_time],\n        [end_date_time]\n    )\n    VALUES (\n        @entity_batch_id,\n        @domain_name,\n        'R',\n        SYSDATETIME(),\n        NULL\n    );\nEND;\n\n-- Execution log insert\nINSERT INTO audit.orc_execution_log (\n    workspace_id,\n    pipeline_run_id,\n    pipeline_id,\n    pipeline_name,\n    pipeline_trigger_time,\n    batch_id,\n    domain_id,\n    status,\n    inserted_on,\n    pipeline_type\n)\nVALUES (\n    @workspace_id,\n    @pipeline_run_id,\n    @pipeline_id,\n    @pipeline_name,\n    @pipeline_trigger_time,\n    @entity_batch_id,\n    @domain_id,\n    @status,\n    @inserted_on,\n    @pipeline_type\n);\n\nSELECT @domain_id;"
+                        }
+                    ],
+                    "scriptBlockExecutionTimeout": "02:00:00"
+                }
+            },
+            {
+                "name": "Get ORC Domain Name",
+                "type": "Lookup",
+                "dependsOn": [
+                    {
+                        "activity": "ORC start log",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 2,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureSqlSource",
+                        "sqlReaderQuery": {
+                            "value": "SELECT domain_id, domain_name\nFROM retailflow.pipeline_domain\nWHERE is_active = 1\n  AND domain_name = '@{pipeline().parameters.domain_name}'",
+                            "type": "Expression"
+                        },
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "dataset": {
+                        "referenceName": "warehouse",
+                        "type": "DatasetReference"
+                    }
+                }
+            },
+            {
+                "name": "Look for dependency level",
+                "description": "Fetches all pending dependency levels for the domain that have not yet been successfully executed in this batch",
+                "type": "Lookup",
+                "dependsOn": [
+                    {
+                        "activity": "Get ORC Domain Name",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 2,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "AzureSqlSource",
+                        "sqlReaderQuery": {
+                            "value": "SELECT DISTINCT\n    pc.dependency_level,\n    pc.skip_failure,\n    wp.item_id\nFROM retailflow.pipeline_config AS pc\nINNER JOIN retailflow.pipeline_domain AS pd\n    ON pd.domain_id = pc.domain_id\nLEFT JOIN (\n    SELECT item_id\n    FROM retailflow.pipeline_workspace_params\n    WHERE item_type = 'DataPipeline'\n      AND item_name = 'pl_executor_worker'\n) wp ON 1 = 1\nWHERE pc.is_active = 1\n  AND pd.is_active = 1\n  AND pd.domain_id = '@{activity('Get ORC Domain Name').output.firstRow.domain_id}'\n  AND pc.dependency_level NOT IN (\n      SELECT DISTINCT dependency_level\n      FROM audit.orc_execution_log\n      WHERE domain_id = '@{activity('Get ORC Domain Name').output.firstRow.domain_id}'\n        AND status = 'S'\n        AND batch_id = '@{pipeline().parameters.entity_batch_id}'\n        AND dependency_level IS NOT NULL\n  )\nORDER BY pc.dependency_level;",
+                            "type": "Expression"
+                        },
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "dataset": {
+                        "referenceName": "warehouse",
+                        "type": "DatasetReference"
+                    },
+                    "firstRowOnly": false
+                }
+            },
+            {
+                "name": "Loop for each dependency level",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "Look for dependency level",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@activity('Look for dependency level').output.value",
+                        "type": "Expression"
+                    },
+                    "isSequential": true,
+                    "activities": [
+                        {
+                            "name": "ORC If condition for dependency execution",
+                            "type": "IfCondition",
+                            "dependsOn": [],
+                            "userProperties": [],
+                            "typeProperties": {
+                                "expression": {
+                                    "value": "@equals(variables('FailPipeline'),'0')",
+                                    "type": "Expression"
+                                },
+                                "ifFalseActivities": [
+                                    {
+                                        "name": "False set variable for fail pipeline",
+                                        "type": "SetVariable",
+                                        "dependsOn": [],
+                                        "policy": {
+                                            "secureOutput": false,
+                                            "secureInput": false
+                                        },
+                                        "userProperties": [],
+                                        "typeProperties": {
+                                            "variableName": "FailPipeline",
+                                            "value": "1"
+                                        }
+                                    },
+                                    {
+                                        "name": "ORC append error skip message",
+                                        "type": "AppendVariable",
+                                        "dependsOn": [
+                                            {
+                                                "activity": "False set variable for fail pipeline",
+                                                "dependencyConditions": [
+                                                    "Completed"
+                                                ]
+                                            }
+                                        ],
+                                        "userProperties": [],
+                                        "typeProperties": {
+                                            "variableName": "IFErrorMessage",
+                                            "value": {
+                                                "value": "@concat('Loop skipped for dependency level: ', item().dependency_level, ' due to previous failure')",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "Fail IF false ORC skip level",
+                                        "type": "Fail",
+                                        "dependsOn": [
+                                            {
+                                                "activity": "ORC append error skip message",
+                                                "dependencyConditions": [
+                                                    "Completed"
+                                                ]
+                                            }
+                                        ],
+                                        "userProperties": [],
+                                        "typeProperties": {
+                                            "message": {
+                                                "value": "@concat('Dependency level ', item().dependency_level, ' skipped. Errors: ', join(variables('IFErrorMessage'), ', '))",
+                                                "type": "Expression"
+                                            },
+                                            "errorCode": {
+                                                "value": "@concat('DEP_LEVEL_SKIP_', item().dependency_level)",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    }
+                                ],
+                                "ifTrueActivities": [
+                                    {
+                                        "name": "Execute Worker pipeline",
+                                        "type": "ExecutePipeline",
+                                        "dependsOn": [],
+                                        "policy": {
+                                            "secureInput": false
+                                        },
+                                        "userProperties": [],
+                                        "typeProperties": {
+                                            "pipeline": {
+                                                "referenceName": "pipelineCopyData_for",
+                                                "type": "PipelineReference"
+                                            },
+                                            "waitOnCompletion": true,
+                                            "parameters": {
+                                                "entity_batch_id": {
+                                                    "value": "@pipeline().parameters.entity_batch_id",
+                                                    "type": "Expression"
+                                                },
+                                                "dependency_level": {
+                                                    "value": "@item().dependency_level",
+                                                    "type": "Expression"
+                                                },
+                                                "domain_id": {
+                                                    "value": "@activity('Get ORC Domain Name').output.firstRow.domain_id",
+                                                    "type": "Expression"
+                                                },
+                                                "item_id": {
+                                                    "value": "@item().item_id",
+                                                    "type": "Expression"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "True Set variable for FailPipeline",
+                                        "type": "SetVariable",
+                                        "dependsOn": [
+                                            {
+                                                "activity": "Execute Worker pipeline",
+                                                "dependencyConditions": [
+                                                    "Failed"
+                                                ]
+                                            }
+                                        ],
+                                        "policy": {
+                                            "secureOutput": false,
+                                            "secureInput": false
+                                        },
+                                        "userProperties": [],
+                                        "typeProperties": {
+                                            "variableName": "FailPipeline",
+                                            "value": {
+                                                "value": "@if(equals(item().skip_failure,1),'0','1')",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "Append Error variable true for ORC invoke worker",
+                                        "type": "AppendVariable",
+                                        "dependsOn": [
+                                            {
+                                                "activity": "True Set variable for FailPipeline",
+                                                "dependencyConditions": [
+                                                    "Completed"
+                                                ]
+                                            }
+                                        ],
+                                        "userProperties": [],
+                                        "typeProperties": {
+                                            "variableName": "IFErrorMessage",
+                                            "value": {
+                                                "value": "@if(\n    equals(activity('Execute Worker pipeline').status,'Failed'),\n    activity('Execute Worker pipeline').error.message,\n    'No Activity Failed'\n)",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "name": "True Fail ORC Invoke Worker",
+                                        "type": "Fail",
+                                        "dependsOn": [
+                                            {
+                                                "activity": "Append Error variable true for ORC invoke worker",
+                                                "dependencyConditions": [
+                                                    "Completed"
+                                                ]
+                                            }
+                                        ],
+                                        "userProperties": [],
+                                        "typeProperties": {
+                                            "message": {
+                                                "value": "@concat('Loop failed for dependency Level: ', item().dependency_level, ' | ', join(variables('IFErrorMessage'), ', '))",
+                                                "type": "Expression"
+                                            },
+                                            "errorCode": {
+                                                "value": "@concat('DEP_LEVEL_FAIL_', item().dependency_level)",
+                                                "type": "Expression"
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": "ForEach ORC set Error Variable",
+                            "type": "SetVariable",
+                            "dependsOn": [
+                                {
+                                    "activity": "ORC If condition for dependency execution",
+                                    "dependencyConditions": [
+                                        "Failed"
+                                    ]
+                                }
+                            ],
+                            "policy": {
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "variableName": "ForEachErrorMessage",
+                                "value": {
+                                    "value": "@if(\n    equals(activity('ORC If condition for dependency execution').status, 'Failed'),\n    concat(\n        join(variables('IFErrorMessage'), ', '),\n        ' | ',\n        activity('ORC If condition for dependency execution').error.message\n    ),\n    'No Activity Failed'\n)",
+                                    "type": "Expression"
+                                }
+                            }
+                        },
+                        {
+                            "name": "ForEach Error Handling Script",
+                            "type": "Script",
+                            "dependsOn": [
+                                {
+                                    "activity": "ForEach ORC set Error Variable",
+                                    "dependencyConditions": [
+                                        "Completed"
+                                    ]
+                                }
+                            ],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "linkedServiceName": {
+                                "referenceName": "ecomwarehouse",
+                                "type": "LinkedServiceReference"
+                            },
+                            "typeProperties": {
+                                "scripts": [
+                                    {
+                                        "type": "NonQuery",
+                                        "text": "INSERT INTO audit.orc_error_log (\n    workspace_id,\n    pipeline_run_id,\n    pipeline_id,\n    pipeline_name,\n    pipeline_trigger_time,\n    batch_id,\n    inserted_on,\n    pipeline_type,\n    error_description,\n    dependency_level\n)\nVALUES (\n    @workspace_id,\n    @pipeline_run_id,\n    @pipeline_id,\n    @pipeline_name,\n    @pipeline_trigger_time,\n    @entity_batch_id,\n    GETDATE(),\n    @pipeline_type,\n    @error_description,\n    @dependency_level\n);"
+                                    }
+                                ],
+                                "scriptBlockExecutionTimeout": "02:00:00"
+                            }
+                        },
+                        {
+                            "name": "ForEach Fail pipeline",
+                            "type": "Fail",
+                            "dependsOn": [
+                                {
+                                    "activity": "ForEach Error Handling Script",
+                                    "dependencyConditions": [
+                                        "Completed"
+                                    ]
+                                }
+                            ],
+                            "userProperties": [],
+                            "typeProperties": {
+                                "message": {
+                                    "value": "@variables('ForEachErrorMessage')",
+                                    "type": "Expression"
+                                },
+                                "errorCode": "ORC_FOREACH_FAIL"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "ORC Pipeline end log",
+                "type": "Script",
+                "dependsOn": [
+                    {
+                        "activity": "Loop for each dependency level",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 2,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "linkedServiceName": {
+                    "referenceName": "ecomwarehouse",
+                    "type": "LinkedServiceReference"
+                },
+                "typeProperties": {
+                    "scripts": [
+                        {
+                            "type": "NonQuery",
+                            "text": "DECLARE @DomainName NVARCHAR(100);\nDECLARE @MaxRetries INT = 5;\nDECLARE @Attempt INT = 1;\n\nSELECT @DomainName = domain_name\nFROM retailflow.pipeline_domain\nWHERE is_active = 1\n  AND domain_id = @domain_id;\n\nWHILE @Attempt <= @MaxRetries\nBEGIN\n    BEGIN TRY\n        -- Mark execution log as succeeded\n        UPDATE audit.orc_execution_log\n        SET status = 'S',\n            completed_on = GETDATE()\n        WHERE pipeline_run_id = @pipeline_run_id\n          AND domain_id = @domain_id;\n\n        -- Update batch log as succeeded\n        UPDATE [audit].[orc_batch_log]\n        SET status = 'S',\n            end_date_time = SYSDATETIME()\n        WHERE batch_id = @entity_batch_id\n          AND domain_name = @DomainName;\n\n        BREAK; -- Exit loop on success\n    END TRY\n    BEGIN CATCH\n        PRINT CONCAT('Attempt ', @Attempt, ' failed: ', ERROR_MESSAGE());\n        WAITFOR DELAY '00:00:02';\n    END CATCH\n\n    SET @Attempt += 1;\nEND\n\nIF @Attempt > @MaxRetries\n    THROW 51000, 'End log update failed after maximum retries.', 1;"
+                        }
+                    ],
+                    "scriptBlockExecutionTimeout": "02:00:00"
+                }
+            },
+            {
+                "name": "Set ORC Error Variable",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "ORC Pipeline end log",
+                        "dependencyConditions": [
+                            "Failed",
+                            "Skipped"
+                        ]
+                    },
+                    {
+                        "activity": "Loop for each dependency level",
+                        "dependencyConditions": [
+                            "Failed",
+                            "Skipped"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "ORCErrorMessage",
+                    "value": {
+                        "value": "@if(\n    equals(activity('ORC start log').status, 'Failed'),\n    activity('ORC start log').error.message,\n    if(\n        equals(activity('Get ORC Domain Name').status, 'Failed'),\n        activity('Get ORC Domain Name').error.message,\n        if(\n            equals(activity('Look for dependency level').status, 'Failed'),\n            activity('Look for dependency level').error.message,\n            if(\n                equals(activity('Loop for each dependency level').status, 'Failed'),\n                activity('Loop for each dependency level').error.message,\n                if(\n                    equals(activity('ORC Pipeline end log').status, 'Failed'),\n                    activity('ORC Pipeline end log').error.message,\n                    'No Activity Failed'\n                )\n            )\n        )\n    )\n)",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "Generic Error Handling Script",
+                "type": "Script",
+                "dependsOn": [
+                    {
+                        "activity": "Set ORC Error Variable",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "linkedServiceName": {
+                    "referenceName": "ecomwarehouse",
+                    "type": "LinkedServiceReference"
+                },
+                "typeProperties": {
+                    "scripts": [
+                        {
+                            "type": "NonQuery",
+                            "text": "INSERT INTO audit.orc_error_log (\n    workspace_id,\n    pipeline_run_id,\n    pipeline_id,\n    pipeline_name,\n    pipeline_trigger_time,\n    batch_id,\n    inserted_on,\n    pipeline_type,\n    error_description,\n    dependency_level\n)\nVALUES (\n    @workspace_id,\n    @pipeline_run_id,\n    @pipeline_id,\n    @pipeline_name,\n    @pipeline_trigger_time,\n    @entity_batch_id,\n    GETDATE(),\n    @pipeline_type,\n    @ORCErrorMessage,\n    NULL\n);"
+                        }
+                    ],
+                    "scriptBlockExecutionTimeout": "02:00:00"
+                }
+            },
+            {
+                "name": "Update ORC pipeline fail log",
+                "type": "Script",
+                "dependsOn": [
+                    {
+                        "activity": "Generic Error Handling Script",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "linkedServiceName": {
+                    "referenceName": "ecomwarehouse",
+                    "type": "LinkedServiceReference"
+                },
+                "typeProperties": {
+                    "scripts": [
+                        {
+                            "type": "NonQuery",
+                            "text": "DECLARE @MaxRetries INT = 5;\nDECLARE @Attempt INT = 1;\nDECLARE @Succeeded BIT = 0;\n\nWHILE (@Attempt <= @MaxRetries AND @Succeeded = 0)\nBEGIN\n    BEGIN TRY\n        -- Mark execution log as failed\n        UPDATE audit.orc_execution_log\n        SET status = 'F',\n            completed_on = GETDATE()\n        WHERE pipeline_run_id = @pipeline_run_id\n          AND domain_id = @domain_id;\n\n        -- Mark batch log as failed\n        UPDATE audit.orc_batch_log\n        SET status = 'F',\n            end_date_time = SYSDATETIME()\n        WHERE batch_id = @entity_batch_id\n          AND domain_name = @domain_name;\n\n        SET @Succeeded = 1;\n    END TRY\n    BEGIN CATCH\n        PRINT CONCAT('Attempt ', @Attempt, ' failed: ', ERROR_MESSAGE());\n        WAITFOR DELAY '00:00:02';\n    END CATCH;\n\n    SET @Attempt += 1;\nEND\n\nIF (@Succeeded = 0)\nBEGIN\n    THROW 51000, 'Fail log update failed after 5 attempts.', 1;\nEND;"
+                        }
+                    ],
+                    "scriptBlockExecutionTimeout": "02:00:00"
+                }
+            },
+            {
+                "name": "Fail Pipeline",
+                "type": "Fail",
+                "dependsOn": [
+                    {
+                        "activity": "Update ORC pipeline fail log",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "message": {
+                        "value": "@variables('ORCErrorMessage')",
+                        "type": "Expression"
+                    },
+                    "errorCode": "ORC_MASTER_FAIL"
+                }
+            }
+        ],
+        "parameters": {
+            "entity_batch_id": {
+                "type": "string",
+                "defaultValue": "0"
+            },
+            "environment": {
+                "type": "string",
+                "defaultValue": "DEV"
+            },
+            "domain_name": {
+                "type": "string"
+            }
+        },
+        "variables": {
+            "FailPipeline": {
+                "type": "String",
+                "defaultValue": "0"
+            },
+            "IFErrorMessage": {
+                "type": "Array"
+            },
+            "ForEachErrorMessage": {
+                "type": "String"
+            },
+            "ORCErrorMessage": {
+                "type": "String"
+            }
+        },
+        "annotations": [],
+        "lastPublishTime": "2026-04-26T00:00:00Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
+}
